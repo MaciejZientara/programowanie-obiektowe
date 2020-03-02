@@ -20,23 +20,38 @@ int main(){
                 if(x-'0'>=0 && x-'9'<=0)
                     printf("%s ",szyfr[x-'0'+26]);
                 else
-                    printf("& ");
+                    if(x==' ')
+                        printf("  ");
+                    else
+                        printf("& ");
         }
     }
     if(t==1){
         struct trie *g=T;
         char x;
+        int ile=0;
         while((x=getchar())){
             //printf("x=%c\n",x);
             if(x==EOF)
                 return 0;
-            if(x==' ' || x=='\n'){
+            if(x=='\n')
                 if(g->l!=0){
-                    printf("%c",g->l);
-                    g=T;
-                }
+                        ile=0;
+                        printf("%c\n",g->l);
+                        g=T;
+                    }
+            if(x==' '){
+                ile=(ile+1)%3;
+                if(ile==1)
+                    if(g->l!=0){
+                        printf("%c",g->l);
+                        g=T;
+                    }
+                if(ile==0)
+                    printf(" ");
             }
             if(x=='.'){
+                ile=0;
                 if(g->dot!=NULL)
                     g=g->dot;
                 else{
@@ -45,12 +60,17 @@ int main(){
                 }
             }
             if(x=='-'){
+                ile=0;
                 if(g->line!=NULL)
                     g=g->line;
                 else{
                     printf("error\n");
                     break;
                 }
+            }
+            if(x!='.' && x!='-' && x!=' ' && x!='\n'){
+                printf("error\n");
+                break;
             }
         }
     }
